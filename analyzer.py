@@ -4,6 +4,8 @@ import json
 import requests
 from bs4 import BeautifulSoup
 
+from sender import MailManager
+
 
 class Locator(object):
     loc_url = "https://geoiptool.com"
@@ -37,7 +39,7 @@ class Analyzer(object):
         return 'Getting data for {lat: %s, long: %s, city: %s}' % (self.lat, self.long, self.city)
 
     def build_url(self):
-        return self.base + '&lat=' + self.lat + '&long=' + self.long + '&city=' + self.city
+        return self.base + '&lat=' + self.lat + '&lon=' + self.long + '&city=' + self.city
 
     def get_data(self):
         meteo_url = self.build_url()
@@ -50,3 +52,14 @@ l = Locator()
 print(l.loc_data)
 l.get_location()
 print(l.loc_data)
+
+data = l.loc_data
+a = Analyzer(data['Latitude'], data['Longitude'], data['City'])
+print(a)
+url = a.build_url()
+print(url)
+
+weather_data = a.get_data()
+
+print(weather_data)
+MailManager('zofy11@gmail.com', weather_data).send_forecast()
