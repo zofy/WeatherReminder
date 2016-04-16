@@ -62,4 +62,8 @@ print(url)
 weather_data = a.get_data()
 
 print(weather_data)
-MailManager('zofy11@gmail.com', weather_data).send_forecast()
+
+
+m = MailManager('zofy11@gmail.com', str(weather_data))
+m.login_to_server()
+m.send_forecast()
